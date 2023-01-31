@@ -1,0 +1,60 @@
+# baixar todos os imports necessários pelo Google Colab
+
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+from google.colab import auth
+from oauth2client.client import GoogleCredentials
+auth.authenticate_user()
+gauth = GoogleAuth()
+gauth.credentials = GoogleCredentials.get_application_default()
+drive = GoogleDrive(gauth)
+from google.colab import auth
+auth.authenticate_user()
+import gspread
+from google.auth import default
+creds, _ = default()
+gc = gspread.authorize(creds)
+import pandas as pd
+from gspread_dataframe import get_as_dataframe, set_with_dataframe
+
+
+#Chamo a planilha pelo nome dela usando gc.open
+worksheet = gc.open('nomeDaPlanilhaOrigem').sheet1
+
+# Chama a planilha e todos os valores da planilha, usa pandas para converter a estrutura dos dados e seleciona com a variavel "cols" quais colunas quer, pois no caso não quero todas as colunas
+rows = worksheet.get_all_values()
+df = pd.DataFrame.from_records(rows)
+cols = [8, 9, 11, 6, 7, 20, 21, 22, 23, 24, 1, 16]
+
+# df já é o nome da variavel que contem os dados e "iloc" é a função para separar esses dados com as colunas selecionadas por padrão coloca ":," e depois o nome da variavel "cols" que contem os números das colunas, criei depois col_names para dar nome as colunas no resultado final e chamei o resultado df.columns = col_names, lembrando que "columns" é função.
+
+df = df.iloc[:, cols]
+col_names = ['Unidade', 'Matricula', 'PlanoCliente',
+             'UF','Cidade','ValorFrete','Desconto',
+             'ValorNota','AtivosBlack','AtivosFit',
+             'AtivosSmart','DataEmissao']
+df.columns = col_names
+
+
+
+
+#Abaixo um filtro que usei para puxar apenas dados de uma chave especifica, que no caso estava em coluna "Unidade" e separei todas as chaves que queria em uma lista
+df = df[df['Unidade'].isin(['SPIRBP1',	'SPIFRC1',	'SPIMGC1',	
+                    'SPIARQ1',	'SPIRBP2',	'SPIRBP3',	
+                    'SPIARA1',	'SPITBT1',	'SPIPRP1',	
+                    'MGIUBR1',	'SPIJAC1',	'PRIFIC1',	
+                    'MGIMTC1',	'SPIARS1',	'MGIUBE1',	
+                    'SPISJC5',	'SPIMRL1',	'SPISJC4',	
+                    'SPIJAC2',	'SPIRBP5',	'PRIFIC2'])]
+                    
+#Essa função abaixo define qual planilha será a de destino, ou seja, onde colocaremos os dados                    
+sh = gc.open("nomePlanilhaDestino")
+
+# Tenta criar uma aba na planilha destino chamada "dados", coloca os dados nela. Se não conseguir, coloca em dados os dados.
+try:
+    worksheet = sh.add_worksheet(title="dados", rows=df.shape[0], cols=df.shape[1])
+except Exception as e:
+    worksheet = sh.worksheet("dados")
+set_with_dataframe(worksheet, df)
+
+
