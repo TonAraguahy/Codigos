@@ -1,4 +1,5 @@
 
+function formatarData() {
 // variavel sheet aciona a planilha com o nome "dados" depois a variavel columnN seleciona N:N e o formato é dd/MM/yyyy dia mes e ano, por fim aplica
 
 var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("dados");
@@ -8,3 +9,20 @@ var dateFormat = "dd/MM/yyyy";
 
 // Aplica o formato de data à coluna N
 columnN.setNumberFormat(dateFormat);
+}
+
+
+
+function ordenarBase() {
+// na planilha ativa ordena os dados de acordo com a coluna G (no caso abaixo)
+
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("dados");
+  
+  // para começar na linha 2
+  
+  var range = sheet.getDataRange().offset(1,0,sheet.getLastRow()-1,sheet.getLastColumn());
+  
+  //ordem na coluna 7, lembrando que coluna 0 é a A
+  
+  range.sort([{column: 7, ascending: true}]);
+}
