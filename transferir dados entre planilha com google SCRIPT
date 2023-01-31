@@ -1,0 +1,60 @@
+function readDataFromSheet() {
+// apagar todos dados a apartir da segunda linha
+
+  var sheet = SpreadsheetApp.getActive().getSheetByName("dados");
+  var lastRow = sheet.getLastRow();
+  if (lastRow > 1) {
+    sheet.deleteRows(2, lastRow - 1);
+    }
+
+ // cria variavel com link da planilha, depois diz o nome da planilha e cria variavel com todos os dados que contem dentro dela.
+
+  var sheetUrl = "https://docs.google.com/spreadsheets/d/13uV0_Q0T26WB8FKWqrbOpAn_9zA8MVSN3OkdzD7xgz0/edit#gid=1551092157";
+  
+  var sourceSheet = SpreadsheetApp.openByUrl(sheetUrl).getSheetByName("CLIENTE SUPPS");
+  var sourceData = sourceSheet.getDataRange().getValues();
+  
+  //cria variavel para colocar um filtro especifico, no caso abaixo são siglas
+
+  var compareValues = ['SPIRBP1',	'SPIFRC1',	'SPIMGC1',	
+  'SPIARQ1',	'SPIRBP2',	'SPIRBP3',	
+  'SPIARA1',	'SPITBT1',	'SPIPRP1',	
+  'MGIUBR1',	'SPIJAC1',	'PRIFIC1',	
+  'MGIMTC1',	'SPIARS1',	'MGIUBE1',	
+  'SPISJC5',	'SPIMRL1',	'SPISJC4',	
+  'SPIJAC2',	'SPIRBP5',	'PRIFIC2'];
+
+  var filteredData = [];
+
+  for (var i = 0; i < sourceData.length; i++) {
+
+    // aqui em baixo em compareValues verifica a planilha de origem, nesse caso a verificação está em "8" e começa a filtrar os dados de acordo com as siglas acima. Depois de fazer essa verificação começa a enviar dados especificos cada número representa a coluna da planilha de origem.
+
+    if (compareValues.indexOf(sourceData[i][8]) != -1) {
+      filteredData.push([sourceData[i][5], sourceData[i][6], 
+      sourceData[i][7], sourceData[i][8], 
+      sourceData[i][9], sourceData[i][11], 
+      sourceData[i][16], sourceData[i][20], 
+      sourceData[i][21], sourceData[i][22], 
+      sourceData[i][23], sourceData[i][1],
+      sourceData[i][24]]);
+    }
+  }
+  
+  // abaixo seleciona a linha 2, para começar a partir dela. Depois começa a pegar todos os dados de uma vez e coloca dentro da planilha na aba "dados"
+  var destinationSheet = SpreadsheetApp.getActiveSheet();
+  var startRow = 2;
+  destinationSheet.getRange(startRow, 1, filteredData.length, filteredData[0].length).setValues(filteredData);
+
+
+    // formata a coluna G:G em dia mes e ano ao final de todo processo anterior.
+    
+var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("dados");
+var columnN = sheet.getRange("g:g");
+// Define o formato de data
+var dateFormat = "dd/MM/yyyy";
+
+// Aplica o formato de data à coluna N
+columnN.setNumberFormat(dateFormat);
+
+}
