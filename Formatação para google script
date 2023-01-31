@@ -1,0 +1,10 @@
+
+// variavel sheet aciona a planilha com o nome "dados" depois a variavel columnN seleciona N:N e o formato é dd/MM/yyyy dia mes e ano, por fim aplica
+
+var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("dados");
+var columnN = sheet.getRange("N:N");
+// Define o formato de data
+var dateFormat = "dd/MM/yyyy";
+
+// Aplica o formato de data à coluna N
+columnN.setNumberFormat(dateFormat);
