@@ -1,0 +1,36 @@
+// Puxa dados da planilha um para planilha dois, porém análisa a partir da linha 2 (da planilha 1) os dados unicos da Coluna O (15). Nesse caso as duas planilhas são identicas, porém a planilha 1 os dados estão desatualizados, enquanto na planilha 2 existem dados novos em ordem aleatoria.
+
+
+function transferirSuppsData() {
+  var sheet1 = SpreadsheetApp.getActive().getSheetByName("aba da planilha atual");
+  var sheet2 = SpreadsheetApp.openById("ID GOOGLE SHEET DA PLANILHA DOIS").getSheetByName("nome da aba da planilha dois");
+  
+  //opta por começa na linha dois
+  var startRow1 = 2;
+  var lastRow1 = sheet1.getLastRow();
+  var lastRow2 = sheet2.getLastRow();
+  
+  //abaixo escolha a coluna CHAVE, se não houver, concatene alguns dados para ter dados unicos
+  
+  var keyColumn = 15; // Coluna O
+  
+  // no caso abaixo é A até Z
+  
+  var numColumns = 26; // Quantidade de colunas
+  
+  var data1 = sheet1.getRange(startRow1, 1, lastRow1 - startRow1 + 1, keyColumn).getValues();
+  var keys1 = data1.map(function(row) { return row[keyColumn-1]; });
+  
+  var data2 = sheet2.getRange(2, 1, lastRow2 - 1, numColumns).getValues();
+  var keys2 = data2.map(function(row) { return row[keyColumn-1]; });
+  
+  for (var i = 0; i < data2.length; i++) {
+    if (keys2.indexOf(data2[i][keyColumn-1]) === i && keys1.indexOf(data2[i][keyColumn-1]) === -1) {
+      var row = [data2[i]];
+      sheet1.getRange(lastRow1 + 1, 1, 1, numColumns).setValues(row);
+      lastRow1++;
+    }
+  }
+}
+
+
