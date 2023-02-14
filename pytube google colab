@@ -1,0 +1,16 @@
+!pip install pytube
+!pip install moviepy
+from pytube import YouTube
+from moviepy.editor import VideoFileClip
+yt = YouTube('https://www.youtube.com/watch?v=1hwfU_uSQ2k')
+streams = yt.streams.filter(progressive=True, file_extension='mp4')
+streams = sorted(streams, key=lambda s: s.resolution, reverse=True)
+stream = streams[0]
+stream.download()
+
+
+#editar tempo de vídeo
+
+video = VideoFileClip("video.mp4") #nome do vídeo
+video = video.subclip(0, 120)  # escolhe os primeiros 2 minutos
+video.write_videofile("video_short.mp4") #nome que ficará
