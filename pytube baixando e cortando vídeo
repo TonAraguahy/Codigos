@@ -1,0 +1,24 @@
+
+
+
+#baixar o vídeo
+!pip install pytube
+from pytube import YouTube
+
+yt = YouTube('https://www.youtube.com/watch?v=YkiMq0vsGDA')
+streams = yt.streams.filter(progressive=True, file_extension='mp4')
+streams = sorted(streams, key=lambda s: s.resolution, reverse=True)
+stream = streams[0]
+stream.download()
+
+
+
+
+#cortar o vídeo
+!pip install moviepy
+from moviepy.editor import VideoFileClip
+
+# Cortar o vídeo e X segundos
+video = VideoFileClip("video.mp4")
+video = video.subclip(20, 130)  # escolhe os primeiros 2 minutos, está por segundo.
+video.write_videofile("video_short.mp4")
