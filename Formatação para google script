@@ -26,22 +26,3 @@ function ordenarBase() {
   
   range.sort([{column: 7, ascending: true}]);
 }
-
-
-
-
-function deletaColunaVazia() {
-// Começando da ultima linha, verifica as primeiras linhas, se estiver vazia deleta a coluna.
-  var sheet = SpreadsheetApp.getActive().getSheetByName("dados");
-  var lastRow = sheet.getLastRow();
-  var lastColumn = sheet.getLastColumn();
-  var data = sheet.getRange(lastRow, 1, 1, lastColumn).getValues()[0];
-  
-  for (var i = data.length - 1; i >= 0; i--) {
-    if (data[i] === '') {
-      sheet.deleteColumn(i + 1);
-    } else {
-      break;
-    }
-  }
-}
