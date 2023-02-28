@@ -13,6 +13,10 @@ columnN.setNumberFormat(dateFormat);
 
 
 
+
+
+
+
 function ordenarBase() {
 // na planilha ativa ordena os dados de acordo com a coluna G (no caso abaixo)
 
@@ -25,4 +29,108 @@ function ordenarBase() {
   //ordem na coluna 7, lembrando que coluna 0 é a A
   
   range.sort([{column: 7, ascending: true}]);
+}
+
+
+
+
+
+
+
+//Organiza a base de dados em fileira vertical
+function OrganizaFileira() {
+  //ativa a planilha atual
+  var sheet = SpreadsheetApp.getActiveSheet();
+  // verifica os dados de toda planilha
+  var range = sheet.getDataRange();
+  // armazena os dados em values
+  var values = range.getValues();
+  var output = [];
+  
+  // faz a variavel i até onde tem valor
+  for (var i = 1; i < values.length; i++) {
+    var name = values[i][0];
+    var banana = values[i][1];
+    var grape = values[i][2]
+    var maca = values[i][3];
+    var data = values[i][4];
+    if (banana != "") {
+      output.push([name, data, "banana", banana]);
+    }
+    
+    if (grape != "") {
+      output.push([name,data, "uva", grape]);
+    }
+
+    if (maca != "") {
+      output.push([name,data, "maça", maca]);
+    }
+  }
+  
+  var outputRange = sheet.getRange(2, 6, output.length, 4);
+  outputRange.setValues(output);
+}
+
+
+
+
+
+
+
+/exemplo de organiza fileira maior
+
+function OrganizaFileira() {
+  //ativa a planilha atual
+  var sheet = SpreadsheetApp.getActiveSheet();
+  // verifica os dados de toda planilha
+  var range = sheet.getDataRange();
+  // armazena os dados em values
+  var values = range.getValues();
+  var output = [];
+  
+  // Loop através das linhas de dados (exceto a primeira linha de cabeçalho)
+  for (var i = 1; i < values.length; i++) {
+    var timestamp = values[i][0];
+    var guaranaEstoque = values[i][1];
+    var guaranaVencidas = values[i][2];
+    var guaranaAtendem = values[i][3];
+    var termogenicoEstoque = values[i][4];
+    var termogenicoVencidas = values[i][5];
+    var termogenicoAtendem = values[i][6];
+    var bcaaEstoque = values[i][7];
+    var bcaaVencidas = values[i][8];
+    var bcaaAtendem = values[i][9];
+    var hibiscoEstoque = values[i][10];
+    var hibiscoVencidas = values[i][11];
+    var hibiscoAtendem = values[i][12];
+    var macaEstoque = values[i][13];
+    var macaVencidas = values[i][14];
+    var macaAtendem = values[i][15];
+    var pitayaEstoque = values[i][16];
+    var pitayaVencidas = values[i][17];
+    var pitayaAtendem = values[i][18];
+    var doses = values[i][19];
+    
+    // Adiciona cada sabor à saída, se houver estoque disponível
+    if (guaranaEstoque > 0) {
+      output.push([timestamp, "Guarana", guaranaEstoque, guaranaVencidas, guaranaAtendem, doses, values[i][20]]);
+    }
+    if (termogenicoEstoque > 0) {
+      output.push([timestamp, "Termogenico", termogenicoEstoque, termogenicoVencidas, termogenicoAtendem, doses, values[i][21]]);
+    }
+    if (bcaaEstoque > 0) {
+      output.push([timestamp, "BCAA", bcaaEstoque, bcaaVencidas, bcaaAtendem, doses, values[i][22]]);
+    }
+    if (hibiscoEstoque > 0) {
+      output.push([timestamp, "Hibisco", hibiscoEstoque, hibiscoVencidas, hibiscoAtendem, doses, values[i][23]]);
+    }
+    if (macaEstoque > 0) {
+      output.push([timestamp, "Maça", macaEstoque, macaVencidas, macaAtendem, doses, values[i][24]]);
+    }
+    if (pitayaEstoque > 0) {
+      output.push([timestamp, "Pitaya", pitayaEstoque, pitayaVencidas, pitayaAtendem,doses, values[i][25]]);
+}}
+
+var outputRange = sheet.getRange(2, 1, output.length, 7);
+outputRange.setValues(output);
 }
