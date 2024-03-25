@@ -1,0 +1,37 @@
+  var urlForms = 'https://docs.google.com/forms/d/1P8BjtbWRBabpQpR1QfSed2KX5AkDiy01m7V1imRPfEg/edit';
+
+  var ss = SpreadsheetApp.openByUrl('https://docs.google.com/spreadsheets/d/1Ig1bZKPw75oA-qnGH6nFyWfnW7MawN73MtDTCXdgBmo/edit#gid=0');
+
+  var sheet = ss.getSheetByName('dados');
+
+
+function lojaA() {
+  var range = sheet.getRange("A2:A");
+  var values = range.getValues();
+  var forms = FormApp.openByUrl(urlForms);
+  var items = forms.getItems(FormApp.ItemType.MULTIPLE_CHOICE);
+  var listaSuspensa = items[1].asMultipleChoiceItem();
+  var opcoes = []
+  for (var i = 0; i < values.length; i++ ){
+    if(values[i][0] !== '' ){
+      opcoes.push(values[i][0])
+    }
+  }
+  listaSuspensa.setChoiceValues(opcoes)
+}
+
+
+function lojaB() {
+  var range = sheet.getRange("B2:B");
+  var values = range.getValues();
+  var forms = FormApp.openByUrl(urlForms);
+  var items = forms.getItems(FormApp.ItemType.MULTIPLE_CHOICE);
+  var listaSuspensa = items[2].asMultipleChoiceItem();
+  var opcoes = []
+  for (var i = 0; i < values.length; i++ ){
+    if(values[i][0] !== '' ){
+      opcoes.push(values[i][0])
+    }
+  }
+  listaSuspensa.setChoiceValues(opcoes)
+}
